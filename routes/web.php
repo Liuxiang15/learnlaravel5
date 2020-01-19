@@ -28,9 +28,10 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Auth::routes();
+Route::get('article/{id}', 'ArticleController@show');
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::post('comment', 'CommentController@store');
+
 
 Route::group(['middleware' => 'auth', 'namespace' => 'Admin', 'prefix' => 'admin'], function() {
     Route::get('/', 'HomeController@index');
@@ -39,6 +40,8 @@ Route::group(['middleware' => 'auth', 'namespace' => 'Admin', 'prefix' => 'admin
     Route::get('article/{id}', 'ArticleController@show');
     Route::resource('articles', 'ArticleController');
     
-    Route::post('comment', 'CommentController@store');
+    // Route::post('comment', 'CommentController@store');
     // Route::resource('articles/create', 'ArticleController');
 });
+
+

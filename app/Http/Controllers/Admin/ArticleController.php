@@ -52,8 +52,31 @@ class ArticleController extends Controller
 	    return redirect()->back()->withInput()->withErrors('删除成功！');
 	}
 
-	public function show($id)
+	//不是在这个文件里面写的，为什么！！！？？？
+	// public function show($id)
+	// {
+	//     return view('article/show')->withArticle(Article::with('hasManyComments')->find($id));
+	// }
+
+	public function edit($id)
 	{
-	    return view('article/show')->withArticle(Article::with('hasManyComments')->find($id));
+		return view('admin/article/edit')->withArticle(Article::find($id));
 	}
+
+	public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'title' => 'required|unique:articles,title,'.$id.'|max:255',
+            'body' => 'required', 
+        ]);
+        $article = Article::find($id);
+        $article->title = $request->get('title');
+        $article->body = $request->get('body');
+        if ($article->save()) {
+            return redirect('admin/articles');
+        } else {
+            return redirect()->back()->withInput()->withErrors('更新失败！');
+        }
+    }
 }
+
